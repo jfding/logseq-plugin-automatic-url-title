@@ -5,7 +5,7 @@ const DEFAULT_REGEX = {
     htmlTitleTag: /<title(\s[^>]+)*>([^<]*)<\/title>/,
     line: /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/gi,
     imageExtension: /\.(gif|jpe?g|tiff?|png|webp|bmp|tga|psd|ai)$/i,
-    wxHtmlTitleTag: /<h1 class="rich_media_title " id="activity-name">([^<]*)<\/h1>/m,
+    wxHtmlTitleTag: /<h1 class="rich_media_title " id="activity-name">([^<]*)<\/h1>/,
 };
 
 const FORMAT_SETTINGS = {
@@ -34,11 +34,10 @@ async function getTitle(url) {
         const responseText = await response.text();
         const matches = responseText.match(DEFAULT_REGEX.htmlTitleTag);
         const wxMatches = responseText.match(DEFAULT_REGEX.wxHtmlTitleTag);
-        if (matches !== null && matches.length > 1 && matches[2] !== null) {
-            return decodeHTML(matches[2].trim());
-        } else if (wxMatches !== null && wxMatches.length > 0 && wxMatches[1] !== null) {
+        if (wxMatches !== null && wxMatches.length > 0 && wxMatches[1] !== null) {
 	    return decodeHTML(wxMatches[1].trim());
-	}
+	} else if (matches !== null && matches.length > 1 && matches[2] !== null) {
+            return decodeHTML(matches[2].trim());
     } catch (e) {
         console.error(e);
     }
