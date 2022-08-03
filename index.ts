@@ -38,6 +38,7 @@ async function getTitle(url) {
 	    return decodeHTML(wxMatches[1].trim());
 	} else if (matches !== null && matches.length > 1 && matches[2] !== null) {
             return decodeHTML(matches[2].trim());
+	}
     } catch (e) {
         console.error(e);
     }
