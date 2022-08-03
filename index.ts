@@ -32,11 +32,14 @@ async function getTitle(url) {
     try {
         const response = await fetch(url);
         const responseText = await response.text();
-        const matches = responseText.match(DEFAULT_REGEX.htmlTitleTag);
+
         const wxMatches = responseText.match(DEFAULT_REGEX.wxHtmlTitleTag);
         if (wxMatches !== null && wxMatches.length > 0 && wxMatches[1] !== null) {
 	    return decodeHTML(wxMatches[1].trim());
-	} else if (matches !== null && matches.length > 1 && matches[2] !== null) {
+	}
+
+        const matches = responseText.match(DEFAULT_REGEX.htmlTitleTag);
+	if (matches !== null && matches.length > 1 && matches[2] !== null) {
             return decodeHTML(matches[2].trim());
 	}
     } catch (e) {
